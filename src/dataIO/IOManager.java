@@ -12,7 +12,13 @@ public class IOManager {
     private byte[] writebuf;
     
     private File diskdir;
-    public IOManager() {
+    public File getDiskdir() {
+		return diskdir;
+	}
+	public void setDiskdir(File diskdir) {
+		this.diskdir = diskdir;
+	}
+	public IOManager() {
     	this.diskdir=new File(diskpath);
     	this.readbuf= new byte[blocksize];//
     	this.writebuf=new byte[blocksize];
