@@ -8,27 +8,27 @@ public class IOManager {
     public static final int rootdirblock=2;
     public static final int blocksize=64;
     public static final int disksize=128;
-    private byte[] readbuf;
-    private byte[] writebuf;
+    private  static byte[] readbuf;
+    private static byte[] writebuf;
     
-    private File diskdir;
-    public File getDiskdir() {
+    private static File diskdir;
+    public static File getDiskdir() {
 		return diskdir;
 	}
-	public void setDiskdir(File diskdir) {
-		this.diskdir = diskdir;
+	public static void setDiskdir(File diskdir) {
+		IOManager.diskdir = diskdir;
 	}
 	public IOManager() {
-    	this.diskdir=new File(diskpath);
-    	this.readbuf= new byte[blocksize];//
-    	this.writebuf=new byte[blocksize];
+    	IOManager.diskdir=new File(diskpath);
+    	IOManager.readbuf= new byte[blocksize];//
+    	IOManager.writebuf=new byte[blocksize];
     	//initFile();
     	
     }
-    private void initDisk() {
+    private static void initDisk() {
     	try {
-    		this.writebuf=new byte[blocksize];
-			FileOutputStream out=new FileOutputStream(this.diskdir);
+    		IOManager.writebuf=new byte[blocksize];
+			FileOutputStream out=new FileOutputStream(IOManager.diskdir);
 			for(int i=0;i<disksize;i++) {
 				out.write(writebuf, 0, blocksize);
 			}
@@ -42,15 +42,15 @@ public class IOManager {
 		}
     }
     
-    public byte[] readoneblock(int blocknum) {
-    	this.readbuf= new byte[blocksize];
+    public static byte[] readoneblock(int blocknum) {
+    	IOManager.readbuf= new byte[blocksize];
     	try {
-			RandomAccessFile temp=new RandomAccessFile(this.diskdir,"r");
+			RandomAccessFile temp=new RandomAccessFile(IOManager.diskdir,"r");
 			
 				temp.skipBytes(blocksize*blocknum);
 				temp.read(readbuf,0,blocksize);
 				temp.close();
-				return (byte[])this.readbuf.clone();
+				return (byte[])IOManager.readbuf.clone();
 		} catch (FileNotFoundException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
@@ -62,13 +62,13 @@ public class IOManager {
     }
     
     
-    public void writeoneblock(int blocknum,byte[] datas) {
-    	this.writebuf=(byte[])datas.clone();
+    public static void writeoneblock(int blocknum,byte[] datas) {
+    	IOManager.writebuf=(byte[])datas.clone();
     	try {
-			RandomAccessFile temp=new RandomAccessFile(this.diskdir,"rw");
+			RandomAccessFile temp=new RandomAccessFile(IOManager.diskdir,"rw");
 			
 				temp.skipBytes(blocksize*blocknum);
-				temp.write(writebuf,0,this.writebuf.length);
+				temp.write(writebuf,0,IOManager.writebuf.length);
 				temp.close();
 				return ;
 		} catch (FileNotFoundException e) {
@@ -80,5 +80,10 @@ public class IOManager {
 		}
     	return ;
     }
+    
+    public static int bytetoint(byte temp) {
+    	return temp & 0xFF;
+    }
+    
     
 }

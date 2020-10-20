@@ -2,16 +2,14 @@ package fat;
 import java.io.*;
 import dataIO.IOManager;
 public class Fat {
- private byte[] fatlist=new byte[2*IOManager.blocksize];
- private IOManager iomanager;
+ private static byte[] fatlist=new byte[2*IOManager.blocksize];
  public Fat() {
-	 this.iomanager=new IOManager();
 	 initFat();
  }
  private void initFat() {
-	 byte[] buf = this.iomanager.readoneblock(0);
+	 byte[] buf = IOManager.readoneblock(0);
 	 System.arraycopy(buf, 0, fatlist, 0, 64);
-	 buf = this.iomanager.readoneblock(1);
+	 buf = IOManager.readoneblock(1);
    System.arraycopy(buf, 0, fatlist, 64, 64);
 	 
  }
@@ -19,7 +17,22 @@ public byte[] getFat() {
 	return fatlist;
 }
 public void setFat(byte[] fatlist) {
-	this.fatlist = fatlist;
+	Fat.fatlist = fatlist;
 }
+
+public static int getnextblock(int num) {
+	return IOManager.bytetoint(fatlist[num]);//得到下一块的位置
+}
+
+public static int searchForUnusedblock() {
+	for(int i=3;i<IOManager.disksize;i++) {
+		if((fatlist[i] & 0xff)==0) {
+			return i;
+		}
+	}
+	return 0;
+}
+
+
  
 }
