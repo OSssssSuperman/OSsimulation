@@ -7,9 +7,9 @@ import java.util.LinkedList;
 
 public class Scheduling {//进程调度
 
-    private static LinkedList<PCB> readyQueue = new LinkedList<>();
-    private static LinkedList<PCB> blockedQueue = new LinkedList<>();
-    private static PCB[] pcbs = new PCB[10];
+    private static final LinkedList<PCB> readyQueue = new LinkedList<>();
+    private static final LinkedList<PCB> blockedQueue = new LinkedList<>();
+    private static final PCB[] pcbs = new PCB[10];
 
 
     private static void protecting(PCB pcb){//现场保护
