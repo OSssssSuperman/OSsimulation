@@ -23,7 +23,9 @@ public void setFat(byte[] fatlist) {
 public static int getnextblock(int num) {
 	return IOManager.bytetoint(fatlist[num]);//得到下一块的位置
 }
-
+public static void setnextblock(int num,int next) {
+	fatlist[num]=(byte) (next&0xff);
+}
 public static int searchForUnusedblock() {
 	for(int i=3;i<IOManager.disksize;i++) {
 		if((fatlist[i] & 0xff)==0) {

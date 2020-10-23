@@ -1,4 +1,9 @@
 package fileSystem;
+
+
+import java.util.ArrayList;
+import java.util.Arrays;
+
 import dataIO.*;
 import fat.Fat;
 public class MyFile extends FileModel {
@@ -13,6 +18,9 @@ public class MyFile extends FileModel {
     	this.path=fpath;
     	this.ext=this.getExt();
     	this.contents=this.foundblock(this.path);
+    }
+    public MyFile(String parent,byte[] contents) {
+    	this(parent+MyFile.getnamefromcontents(contents));
     }
     public static String getnamefromcontents(byte[] con) {
     	if(Byte.toString(con[3]).equals(" ")||Byte.toString(con[3])=="")
@@ -92,8 +100,22 @@ public class MyFile extends FileModel {
 		// TODO Auto-generated method stub
 		if(!exist())return null;
 		if(!isDir())return null;
-		
-		return null;
+		int num=this.getStartBlock();
+		int end=this.foundlastblock();
+		int endindex=this.foundtailindex();
+		ArrayList<MyFile> filelist=new ArrayList<MyFile>();
+		while(num!=end) {
+			byte[] i=IOManager.readoneblock(num);
+			for(int j=0;j<i.length;j+=8) {
+				filelist.add(new MyFile(this.path,Arrays.copyOfRange(i, j, j+8)));
+			}
+		}
+		byte[] i=IOManager.readoneblock(num);
+		for(int j=0;j<endindex;j+=8) {
+			filelist.add(new MyFile(this.path,Arrays.copyOfRange(i, j, j+8)));
+		}
+		MyFile[] temp=filelist.toArray(new MyFile[filelist.size()]);
+		return temp;
 	}
 
 	@Override
@@ -136,6 +158,9 @@ public class MyFile extends FileModel {
 	@Override
 	public boolean createNewFile() {
 		// TODO Auto-generated method stub
+		if(exist()) {System.out.println("文件已经存在");return false;}
+		
+		this.contents=this.foundblock(this.path);
 		return false;
 	}
 
@@ -151,18 +176,19 @@ public class MyFile extends FileModel {
 		return false;
 	}
 	public byte[] foundblock(String temp) {
-    	return foundblocks(temp,2);
+    	return foundblocks(temp,2);   //从根目录开始找
     }
     
     private byte[] foundblocks(String temp,int blocknum) {
     	if(blocknum==-1)return null;
-    	if(temp.lastIndexOf(seperator)<0)return foundbyte(temp,blocknum);
+    	if(temp.lastIndexOf(seperator)<0)return foundbyte(temp,blocknum); //如果没有‘/’了就返回相应目录项
     	String[] i=temp.split(seperator);
     	temp.substring(i[0].length()+1);
-    	return foundblocks(temp,foundnum(i[0],blocknum));
+    	return foundblocks(temp,foundnum(i[0],blocknum));//有‘/’就先找到次级目录的位置递归
     }
     
-    private int foundnum(String temp,int blocknum) {
+    
+    private int foundnum(String temp,int blocknum) {//在当前块以及它的所有后续中
     	if(blocknum==256||blocknum==0||blocknum==1)return -1;
     	byte[] j=IOManager.readoneblock(blocknum);
     	
@@ -176,6 +202,7 @@ public class MyFile extends FileModel {
     	}
     	return foundnum(temp,Fat.getnextblock(blocknum));
     }
+    
     private byte[] foundbyte(String temp,int blocknum) {
     	if(blocknum==256||blocknum==0||blocknum==1)return null;
     	String[] i=temp.split(point);
@@ -204,6 +231,21 @@ public class MyFile extends FileModel {
     	}
     	return foundbyte(temp,Fat.getnextblock(blocknum));
     }
-    
+    public int foundlastblock () {//找到文件的最后一块
+    	int num=this.getStartBlock();
+    	while(Fat.getnextblock(num)!=-1) {
+    		num=Fat.getnextblock(num);
+    	}
+    	return num;
+    }
+    public int foundtailindex() {//找到文件最后一块的第一个未写入字节的位置
+    	int num=this.getStartBlock();
+    	int length=this.getLength();
+    	while(Fat.getnextblock(num)!=-1) {
+    		num=Fat.getnextblock(num);
+    		length-=64;
+    	}
+    	return length;
+    }
     
 }
