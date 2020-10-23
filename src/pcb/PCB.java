@@ -14,8 +14,9 @@ public class PCB {
     private int stateOfProcess ;//进程状态，1为就绪，0为阻塞
     private int pos;//PCB块在数组的位置下标
     // private int reasonOfBlocking = 0;//阻塞原因
+    private int runningTime;
 
-    public PCB(int PC,boolean stateOfPCB,int PID,int AX,String PSW,int IR,int stateOfProcess){
+    public void setPCB(int PC, boolean stateOfPCB, int PID, int AX, String PSW, int IR, int stateOfProcess){
         this.stateOfPCB = stateOfPCB;
         this.PID = PID;
         this.AX = AX;
@@ -23,7 +24,9 @@ public class PCB {
         this.IR = IR;
         this.stateOfProcess = stateOfProcess;
         this.PC = PC;
+        this.runningTime = 6; //时间片长度为6
     }
+
 
 
 }
