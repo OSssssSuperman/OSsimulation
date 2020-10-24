@@ -272,7 +272,7 @@ public class MyFile extends FileModel {
     
     
     public int addcontents(byte[] contents) {
-    	return 
+    	return 0;
     }
     
     private void inclength() {
