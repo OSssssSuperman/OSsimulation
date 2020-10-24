@@ -35,7 +35,29 @@ public class MyFile extends FileModel {
 		}
 		return this.path;
 	}
-
+	
+	public String getNamewithoutext() {
+		if(this.path.lastIndexOf(seperator)>=0) {
+			return this.path.substring(this.path.lastIndexOf(seperator)).split(point)[0];
+		}
+		return this.path.split(point)[0];
+	}
+    public byte[] getconFromString(String filepath) {
+    	String[] split;
+    	String name;
+    	byte[] con=new byte[8];
+    	if(filepath.lastIndexOf("/")>=0) 
+    	     name=filepath.substring(filepath.lastIndexOf(seperator)+1);
+    	else 
+    		 name=filepath;
+    	split=name.split(point);
+    	
+    	if(split[0].length()>3)return null;
+    	
+    	
+    	
+    	
+    }
 	@Override
 	public String getPath() {
 		// TODO Auto-generated method stub
@@ -159,7 +181,7 @@ public class MyFile extends FileModel {
 	public boolean createNewFile() {
 		// TODO Auto-generated method stub
 		if(exist()) {System.out.println("文件已经存在");return false;}
-		
+		this.getParent().addcontents(contents);
 		this.contents=this.foundblock(this.path);
 		return false;
 	}
@@ -248,8 +270,12 @@ public class MyFile extends FileModel {
     	return length;
     }
     
+    
     public int addcontents(byte[] contents) {
     	return 
     }
     
+    private void inclength() {
+    	
+    }
 }
