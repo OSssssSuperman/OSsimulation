@@ -248,4 +248,8 @@ public class MyFile extends FileModel {
     	return length;
     }
     
+    public int addcontents(byte[] contents) {
+    	return 
+    }
+    
 }
