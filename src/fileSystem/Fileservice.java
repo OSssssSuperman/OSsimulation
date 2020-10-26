@@ -17,4 +17,14 @@ public class Fileservice {
        public static MyFile getRootFile() {
     	   return new MyFile("root");
        }
+       
+       public static String getnamefromcontents(byte[] con) {
+       	String temp="";
+       	for(int i=0;i<3;i++) {
+       		if(!Byte.toString(con[i]).equals(" "))temp+=Byte.toString(con[i]);
+       	}
+       	if(Byte.toString(con[3]).equals(" ")||Byte.toString(con[3])=="")
+       	return temp;
+       	return temp+"."+Byte.toString(con[3]);
+       }
 }

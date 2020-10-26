@@ -12,6 +12,7 @@ public class MyFile extends FileModel {
     private final String seperator="/";
     private final String point=".";
     private byte[] contents;
+    
     public MyFile(String fpath) {
     	if(fpath.startsWith("/"))fpath=fpath.substring(1);
     	if(fpath.endsWith("seperator"))fpath=fpath.substring(0, fpath.length()-1);
@@ -19,14 +20,21 @@ public class MyFile extends FileModel {
     	this.ext=this.getExt();
     	this.contents=this.foundblock(this.path);
     }
+    
     public MyFile(String parent,byte[] contents) {
     	this(parent+MyFile.getnamefromcontents(contents));
     }
+    
     public static String getnamefromcontents(byte[] con) {
+    	String temp="";
+    	for(int i=0;i<3;i++) {
+    		if(!Byte.toString(con[i]).equals(" "))temp+=Byte.toString(con[i]);
+    	}
     	if(Byte.toString(con[3]).equals(" ")||Byte.toString(con[3])=="")
-    	return Byte.toString(con[0])+Byte.toString(con[1])+Byte.toString(con[2]);
-    	return Byte.toString(con[0])+Byte.toString(con[1])+Byte.toString(con[2])+"."+Byte.toString(con[3]);
+    	return temp;
+    	return temp+"."+Byte.toString(con[3]);
     }
+    
 	@Override
 	public String getName() {
 		// TODO Auto-generated method stub
@@ -42,28 +50,37 @@ public class MyFile extends FileModel {
 		}
 		return this.path.split(point)[0];
 	}
+	
     public byte[] getconFromString(String filepath) {
     	String[] split;
     	String name;
     	byte[] con=new byte[8];
+    	con[4]="w".getBytes()[0];
     	if(filepath.lastIndexOf("/")>=0) 
     	     name=filepath.substring(filepath.lastIndexOf(seperator)+1);
     	else 
     		 name=filepath;
     	split=name.split(point);
     	
-    	if(split[0].length()>3)return null;
-    	
-    	
-    	
+    	if(split[0].length()>3) {
+    		System.out.println("名字太长");
+    		return null;}
+        System.arraycopy(split[0].getBytes(), 0, con, 0, split[0].getBytes().length);
+    	if(split.length==2) {
+    		con[3]=split[1].getBytes()[0];
+    		return con;
+    	}
+    	con[3]=" ".getBytes()[0];
+    	return con;
     	
     }
+    
 	@Override
 	public String getPath() {
 		// TODO Auto-generated method stub
 		return this.path;
 	}
-
+    
 	@Override
 	public String getAttribute() {
 		// TODO Auto-generated method stub
@@ -78,7 +95,7 @@ public class MyFile extends FileModel {
 		int i=0;
 		i+=(this.contents[6]&0xFF)<<8;
 		i+=(this.contents[7]&0xff);
-		return 0;
+		return i;
 	}
 
 	@Override
@@ -106,7 +123,7 @@ public class MyFile extends FileModel {
 	@Override
 	public MyFile getParent() {
 		// TODO Auto-generated method stub
-		if(this.path.lastIndexOf(seperator)<0)return null;
+		if(this.path.lastIndexOf(seperator)<0)return new MyFile("root");
 		return new MyFile(this.path.substring(0,this.path.lastIndexOf(seperator)));
 	}
 
@@ -150,8 +167,8 @@ public class MyFile extends FileModel {
 	public boolean isDirectory() {
 		// TODO Auto-generated method stub
 				if(this.contents==null)return false;
-				if(Byte.toString(this.contents[3]).equals(" "))return true;
-				return false;
+				if(this.path.contains(point))return false;
+				return true;
 	}
 
 	@Override
@@ -275,7 +292,49 @@ public class MyFile extends FileModel {
     	return 0;
     }
     
-    private void inclength() {
+    private void inclength8() {
     	
+    	int i=this.getLength();
+    	i+=8;
+        this.contents[7]=(byte)(i&0xff);
+        this.contents[6]=(byte)((i>>8)&0xff);
+        this.updatecontents();
+    }
+    
+    private int[] foundcontentsblock(){
+    	int[] bAndi=new int[2];//bAndi=blocknumAndIndex
+    	MyFile parent=this.getParent();
+    	int blocknum=parent.getStartBlock();
+    	int length=parent.getLength();
+    	while(length>64) {
+    		byte[] readbuf=IOManager.readoneblock(blocknum);
+    		for(int i=0;i<IOManager.blocksize;i+=8) {
+    			byte[] conbuf=Arrays.copyOfRange(readbuf, i, i+8);
+    			if(this.getName().equals(Fileservice.getnamefromcontents(conbuf))) {
+    				bAndi[0]=blocknum;
+    				bAndi[1]=i;
+    				return bAndi;
+    			};
+    		}
+    		length-=IOManager.blocksize;
+    	}
+    	byte[] readbuf=IOManager.readoneblock(blocknum);
+		for(int i=0;i<length;i+=8) {
+			byte[] conbuf=Arrays.copyOfRange(readbuf, i, i+8);
+			if(this.getName().equals(Fileservice.getnamefromcontents(conbuf))) {
+				bAndi[0]=blocknum;
+				bAndi[1]=i;
+				return bAndi;
+			};
+		}
+    	return null ;
+    }
+    
+    private boolean updatecontents() {
+    	int [] bAndi=this.foundcontentsblock();
+    	byte[] readbuf=IOManager.readoneblock(bAndi[0]);
+    	System.arraycopy(this.contents, 0, readbuf, bAndi[1], 8);
+    	IOManager.writeoneblock(bAndi[0], readbuf);
+    	return true;
     }
 }
