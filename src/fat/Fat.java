@@ -13,12 +13,13 @@ public class Fat {
    System.arraycopy(buf, 0, fatlist, 64, 64);
 	 
  }
-public byte[] getFat() {
-	return fatlist;
+public static byte[] getFat() {
+	return Fat.fatlist;
 }
 public void setFat(byte[] fatlist) {
 	Fat.fatlist = fatlist;
 }
+
 
 public static int getnextblock(int num) {
 	return IOManager.bytetoint(fatlist[num]);//得到下一块的位置
