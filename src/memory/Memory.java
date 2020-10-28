@@ -39,6 +39,9 @@ public class Memory {
     public PCB getPCB(int pid){//to be continue...
         for(int i=0;i<this.pcbList.size();i++){
 
+            if(this.pcbList.get(i).getPID()==pid){
+                return this.pcbList.get(i);
+            }
         }
 
     }
