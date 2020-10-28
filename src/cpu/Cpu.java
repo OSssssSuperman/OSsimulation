@@ -1,11 +1,14 @@
 package cpu;
 
+import javafx.animation.Timeline;
 import javafx.beans.property.DoubleProperty;
 import javafx.beans.property.SimpleDoubleProperty;
 import javafx.scene.control.Tab;
 import lombok.Getter;
 import lombok.Setter;
 import pcb.PCB;
+import sample.Controller;
+import scheduling.Scheduling;
 
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -14,36 +17,33 @@ import java.util.logging.Logger;
 @Setter
 public class Cpu {
     public static int AX;//数据寄存器（暂）
- // private String[]PSWStatus;//程序状态字（暂）  000没有中断；001为程序结束软中断；010是时间片结束中断；100是I/O中断
     public static String PSW;//程序状态字
-    public static int IR;//指令寄存器（暂）
+    public static String IR;//指令寄存器（暂）
     public static int  PC;//程序计数器
     private double sysTime ;//系统时间
     private double procTime;//时间片
     private boolean stopFlag = true;//CPU运行标识符
-    private final Thread thread = new Thread(new Runnable() {
-        @Override
-        public void run() {
-            while (true) {
-                    if(!Cpu.this.stopFlag){
-                        Cpu.this.sysTime++;//系统时间++（还未修改）
-                    }
-                    try{
-                       Thread.sleep(10L);
-                    }catch (InterruptedException var2) {
-                        Logger.getLogger(Cpu.class.getName()).log(Level.SEVERE, (String)null, var2);
-                    }
-            }
-        }
-    });
+    private static PCB currentProcess;
 
     public static void setCpu(PCB pcb){
         AX = pcb.getAX();
         PSW = pcb.getPSW();
         IR = pcb.getIR();
         PC = pcb.getPC();
+        currentProcess = pcb;
     }
+    public static void cpuEnd(){
+            System.out.println(AX);
+            Scheduling.destroy(currentProcess);//调用完了就撤销
+    }
+    public void timeOver(){
+            System.out.println("寄存器的值存回PCB中\n");
+            Scheduling.scheduling(currentProcess);
 
+    }
+    public static void deviceOver(){
+
+    }
 
     private void CPU(){//模拟单个中央处理器
             //检查PSW（三位）看看有无中断，若有则先处理中断，然后解释运行指令
@@ -58,9 +58,20 @@ public class Cpu {
         //解释可执行文件
 
                 //程序计数器跟踪指令
-                        //if指令是加减或赋值指令  则显示中间结果
-                        //elseif设备申请指令则与设备管理联系起来
-                                //若可分配则分配，中断，进程等待
+                        if(IR.startsWith("x=")) {//if指令是加减或赋值指令  则显示中间结果
+                                System.out.println(AX);
+                                PC++;
+                        }else if(IR.startsWith("x++")){
+                                AX++; PC++;System.out.println(AX);
+                        } else if(IR.startsWith("x--")){
+                                AX--; PC++;System.out.println(AX);
+                        } else if(IR.startsWith("!")) {//elseif设备申请指令则与设备管理联系起来
+                               //if(可分配){
+                                PC++;
+                                Scheduling.block(currentProcess);
+                                Scheduling.scheduling(currentProcess);
+                        }
+                        //若可分配则分配，中断，进程等待
                                 //不可分配则进程等待
                         //elseif是end指令则释放内存结束进程
 
