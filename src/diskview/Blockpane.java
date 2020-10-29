@@ -76,7 +76,7 @@ public class Blockpane extends StackPane {
     	     return this.index;
     	   }
     	   public void setstatus() {
-    		   if(Fat.getFat()[this.index])
+    		  // if(Fat.getFat()[this.index])
     	   }
     	   public void setUsed() {
     	     this.status = 1;

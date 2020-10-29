@@ -2,7 +2,7 @@
 
 <?import javafx.scene.layout.Pane?>
 
-<Pane xmlns:fx="http://javafx.com/fxml/1">
-	<!-- TODO Add Nodes -->
-</Pane>
 
+<fx:root fx:id="Diskviewer" minHeight="50.0" minWidth="40.0" prefHeight="314.0" prefWidth="531.0" type="Pane" xmlns:fx="http://javafx.com/fxml/1" xmlns="http://javafx.com/javafx/11.0.1" fx:controller="diskview.Diskviewer">
+	<!-- TODO Add Nodes -->
+</fx:root>
