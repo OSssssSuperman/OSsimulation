@@ -25,7 +25,7 @@ public class FAT implements Serializable{
 		diskBlocks[0] = new DiskBlock(0, Tool.END, Tool.DISK, root);
 		diskBlocks[0].setFirst(true);
 		diskBlocks[1] = new DiskBlock(1, Tool.END, Tool.DISK, root);
-		diskBlocks[1].setFirst(true);
+		//diskBlocks[1].setFirst(true);
 		for (int i = 2; i < 128; i++) {
 			diskBlocks[i] = new DiskBlock(i, Tool.FREE, Tool.EMPTY, null);
 		}

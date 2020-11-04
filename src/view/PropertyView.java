@@ -1,5 +1,6 @@
 package view;
 
+import java.util.Date;
 import java.util.Map;
 
 import javafx.beans.value.ChangeListener;
@@ -50,7 +51,7 @@ public class PropertyView {
 	private Image ico;
 	
 	private String name;
-	
+	private Date date=new Date();
 	public PropertyView(DiskBlock block, FAT fat, Label icon, Map<Path, TreeItem<String>> pathMap) {
 		this.block = block;
 		this.fat = fat;
@@ -78,7 +79,7 @@ public class PropertyView {
 			locField = new Label(directory.getPosition());
 			sizeField = new Label(directory.getSize() + "KB");
 			spaceField = new Label(directory.getLength());
-			//timeField = new Label(directory.getCreateTime());
+			timeField = new Label(String.valueOf(date));/////
 			oldName = directory.getName();
 			location = directory.getPosition();
 			checkRead.setDisable(true);
@@ -91,7 +92,7 @@ public class PropertyView {
 			locField = new Label(file.getPosition());
 			sizeField = new Label(file.getSize() + "KB");
 			spaceField = new Label(file.getLength());
-			//timeField = new Label(file.getCreateTime());
+			timeField = new Label(String.valueOf(date));/////
 			oldName = file.getName();
 			location = file.getPosition();
 			toggleGroup.selectToggle(file.getFlag() == Tool.READFLAG ? checkRead : checkWrite);

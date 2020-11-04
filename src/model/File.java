@@ -12,7 +12,7 @@ public class File implements Serializable {
 	/**
 	 * 
 	 */
-	private static final long serialVersionUID = -7723410987381496076L;
+	private static final long serialVersionUID = 1L;
     
 	private String name;
 	private String type;
@@ -199,5 +199,20 @@ public class File implements Serializable {
 	}
 	
 	
-	
+	public StringProperty namePProperty() {
+		return nameP;
+	}
+	public StringProperty flagPProperty() {
+		return flagP;
+	}
+	public StringProperty diskNumPProperty() {
+		return diskNumP;
+	}
+	public StringProperty positionPProperty() {
+		return positionP;
+	}
+	public StringProperty blockcountPProperty() {
+		return blockcountP;
+	}
+    
 }

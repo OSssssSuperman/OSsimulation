@@ -7,7 +7,7 @@ public class Tool {
 	
 	public static final String ICO = "res/ico.png";
 	public static final String DIRECTORY_IMG = "res/directory.png";
-	public static final String FILE_IMG = "res/file.png";
+	public static final String FILE_IMG = "res/File (1).png";
 	public static final String DISK_IMG = "res/disk.png";
 	public static final String TREE_NODE_IMG = "res/node.png";
 	public static final String FORWARD_IMG = "res/turnnext.png";

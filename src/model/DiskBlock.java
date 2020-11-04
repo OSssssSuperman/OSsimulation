@@ -19,16 +19,16 @@ public class DiskBlock implements Serializable{
 	private Object obj;
 	private boolean first;
 	
-	private transient SimpleStringProperty numP;
-	private transient SimpleStringProperty nextP;
-	private transient SimpleStringProperty typeP;
-	public SimpleStringProperty getNumP() {
+	private transient StringProperty numP= new SimpleStringProperty();
+	private transient StringProperty nextP= new SimpleStringProperty();
+	private transient StringProperty typeP= new SimpleStringProperty();
+	public StringProperty getNumP() {
 		return numP;
 	}
 	public void setNumP() {
-		numP.set(String.valueOf(num));
+		this.numP.set(String.valueOf(num));
 	}
-	private transient SimpleStringProperty objP;
+	private transient StringProperty objP= new SimpleStringProperty();;
 	public int getNum() {
 		return num;
 	}
@@ -70,19 +70,19 @@ public class DiskBlock implements Serializable{
 	public void setFirst(boolean first) {
 		this.first = first;
 	}
-	public SimpleStringProperty getNextP() {
+	public StringProperty getNextP() {
 		return nextP;
 	}
 	public void setNextP() {
 		nextP.set(String.valueOf(next));
 	}
-	public SimpleStringProperty getTypeP() {
+	public StringProperty getTypeP() {
 		return typeP;
 	}
 	public void setTypeP() {
 		this.typeP.set(type);
 	}
-	public SimpleStringProperty getObjP() {
+	public StringProperty getObjP() {
 		return objP;
 	}
 	public void setObjP() {
@@ -93,8 +93,9 @@ public class DiskBlock implements Serializable{
 		super();
 		this.num=num;
 		this.next=next;
-		this.type=type;
+		this.type=type;this.first=false;
 		this.obj=obj;
+		
 		setNumP();
 		setTypeP();
 		setNextP();
@@ -129,14 +130,30 @@ public class DiskBlock implements Serializable{
     	nextP= new SimpleStringProperty(String.valueOf(next));
     	typeP = new SimpleStringProperty(String.valueOf(type));
     	objP = new SimpleStringProperty(obj==null ? "":obj.toString());
-    	setObjP();
+    	setObj(obj);
     }
 	
 	public String toString() {
+		Object obj = getObj();
 		if (obj instanceof File) {
 			return ((File)obj).toString();
 		} else {
 			return ((Directory)obj).toString();
 		}
 	}
+	
+	public StringProperty numPProperty() {
+		return numP;
+	}	
+	public StringProperty nextPProperty() {
+		return nextP;
+	}
+	public StringProperty typePProperty() {
+		return typeP;
+	}
+	public StringProperty objPProperty() {
+		return objP;
+		
+	}
+
 }

@@ -5,7 +5,6 @@ import model.FAT;
 import model.File;
 import model.Directory;
 import model.Path;
-import model.*;
 
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
@@ -46,7 +45,7 @@ import javafx.scene.layout.FlowPane;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
 import javafx.stage.Stage;
-
+import model.Tool;
 
 public class MainView {
 
@@ -166,13 +165,13 @@ public class MainView {
 		});
 
 		createDirectoryItem.setOnAction(ActionEvent -> {
-			int no=fat.createDirectory(recentPath);
-			if (no==Tool.ERROR) {
+			int num = fat.createDirectory(recentPath);
+			if (num == Tool.ERROR) {
 				Alert alert = new Alert(AlertType.ERROR);
 				alert.setHeaderText("磁盘容量已满，无法创建");
 				alert.showAndWait();
 			} else {
-				Directory newDirectory = (Directory) fat.getBlock(no).getObj();
+				Directory newDirectory = (Directory) fat.getBlock(num).getObj();
 				Path newPath = newDirectory.getPath();
 				flowPane.getChildren().removeAll(flowPane.getChildren());
 				addIcon(fat.getBlockList(recentPath), recentPath);
@@ -300,14 +299,14 @@ public class MainView {
 		dataBlock = FXCollections.observableArrayList(fat.getDiskBlocks());
 		dataOpened = fat.getOpenedFiles();
 
-		TableColumn noCol = new TableColumn("磁盘块");
-		noCol.setCellValueFactory(new PropertyValueFactory<DiskBlock, String>("noP"));
-		noCol.setSortable(false);
-		noCol.setMaxWidth(50);
-		noCol.setResizable(false);
+		TableColumn numCol = new TableColumn("磁盘块");
+		numCol.setCellValueFactory(new PropertyValueFactory<DiskBlock, String>("numP"));
+		numCol.setSortable(false);
+		numCol.setMaxWidth(50);
+		numCol.setResizable(false);
 
 		TableColumn indexCol = new TableColumn("值");
-		indexCol.setCellValueFactory(new PropertyValueFactory<DiskBlock, String>("indexP"));
+		indexCol.setCellValueFactory(new PropertyValueFactory<DiskBlock, String>("nextP"));
 		indexCol.setSortable(false);
 		indexCol.setMaxWidth(50);
 		indexCol.setResizable(false);
@@ -319,13 +318,13 @@ public class MainView {
 		typeCol.setResizable(false);
 
 		TableColumn objCol = new TableColumn("内容");
-		objCol.setCellValueFactory(new PropertyValueFactory<DiskBlock, String>("objectP"));
+		objCol.setCellValueFactory(new PropertyValueFactory<DiskBlock, String>("objP"));
 		objCol.setSortable(false);
 		objCol.setMinWidth(133);
 		objCol.setResizable(false);
 
 		TableColumn nameCol = new TableColumn("文件名");
-		nameCol.setCellValueFactory(new PropertyValueFactory<File, String>("fileNameP"));
+		nameCol.setCellValueFactory(new PropertyValueFactory<File, String>("nameP"));
 		nameCol.setSortable(false);
 		nameCol.setMinWidth(156);
 		nameCol.setResizable(false);
@@ -341,18 +340,18 @@ public class MainView {
 		diskCol.setResizable(false);
 
 		TableColumn pathCol = new TableColumn("路径");
-		pathCol.setCellValueFactory(new PropertyValueFactory<File, String>("locationP"));
+		pathCol.setCellValueFactory(new PropertyValueFactory<File, String>("positionP"));
 		pathCol.setSortable(false);
 		pathCol.setMinWidth(500);
 		pathCol.setResizable(false);
 
 		TableColumn lengthCol = new TableColumn("文件长度");
-		lengthCol.setCellValueFactory(new PropertyValueFactory<File, String>("lengthP"));
+		lengthCol.setCellValueFactory(new PropertyValueFactory<File, String>("blockcountP"));
 		lengthCol.setSortable(false);
 		lengthCol.setResizable(false);
 
 		blockTable.setItems(dataBlock);
-		blockTable.getColumns().addAll(noCol, indexCol, typeCol, objCol);
+		blockTable.getColumns().addAll(numCol, indexCol, typeCol, objCol);
 		blockTable.setEditable(false);
 		blockTable.setPrefWidth(300);
 
