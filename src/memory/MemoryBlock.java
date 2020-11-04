@@ -1,4 +1,4 @@
-package memory;
+/*package memory;
 
 import javafx.scene.control.Label;
 import javafx.scene.control.ProgressIndicator;
@@ -11,6 +11,7 @@ import pcb.PCB;
 /*
 内存块视图
  */
+/*
 public class MemoryBlock extends Pane {
     private Color[] colors=new Color[]{Color.CORNFLOWERBLUE,Color.YELLOWGREEN,Color.DEEPPINK,Color.MEDIUMSPRINGGREEN,
             Color.YELLOW,Color.GOLDENROD,Color.RED};
@@ -41,4 +42,4 @@ public class MemoryBlock extends Pane {
     }
 
 
-}
+}*/

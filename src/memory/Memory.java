@@ -1,4 +1,4 @@
-package memory;
+/*package memory;
 
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
@@ -10,7 +10,7 @@ import pcb.PCB;
 
 /*
 内存
- */
+ *//*
 public class Memory {
     private ObservableList<PCB> pcbList;
     private Map<MATRecord,MemoryBlock> oldRecords;
@@ -60,4 +60,4 @@ public class Memory {
 
     }
 
-}
+}*/

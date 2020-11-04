@@ -194,7 +194,9 @@ public class File implements Serializable {
 		this.flagP = flagP;
 	}
 	
-	
+	public boolean hasParent() {
+		return (parent == null) ? false : true;
+	}
 	
 	
 	

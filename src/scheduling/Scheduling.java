@@ -1,4 +1,4 @@
-package scheduling;
+/*package scheduling;
 
 import cpu.Cpu;
 import pcb.PCB;
@@ -58,4 +58,4 @@ public class Scheduling {//进程调度
         readyQueue.add(tmpPcb);//进程进入就绪队列
     }
 
-}
+}*/

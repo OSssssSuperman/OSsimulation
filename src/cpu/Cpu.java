@@ -1,4 +1,4 @@
-package cpu;
+/*package cpu;
 
 import javafx.animation.Timeline;
 import javafx.beans.property.DoubleProperty;
@@ -51,14 +51,14 @@ public class Cpu {
                 case "001":  //(PSW的是001),软中断,执行cpuEnd()函数->输出x的值,调用进程撤销原语，进程调度
                 case "010":  //相对时钟减到0，时间片结束(PSW为010)，执行timeOver()函数->寄存器的值存入PCB中，进行进程调度
                 /*case "100": wakeup process*/    //设备使用时间倒计时至0，发生I/O中断(PSW为100),执行deviceOver()->唤醒完成输入输出的进程。和等待该设备的进程
-            }
+           // }
 
 
 
         //解释可执行文件
 
                 //程序计数器跟踪指令
-                        if(IR.startsWith("x=")) {//if指令是加减或赋值指令  则显示中间结果
+                        /*if(IR.startsWith("x=")) {//if指令是加减或赋值指令  则显示中间结果
                                 System.out.println(AX);
                                 PC++;
                         }else if(IR.startsWith("x++")){
@@ -83,4 +83,4 @@ public class Cpu {
 
 
 
-}
+}*/
